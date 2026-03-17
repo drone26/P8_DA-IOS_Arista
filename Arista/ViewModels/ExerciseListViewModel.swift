@@ -5,31 +5,43 @@
 //  Created by Vincent Saluzzo on 08/12/2023.
 //
 
-import Foundation
-
 import CoreData
+import SwiftUI
 
-class ExerciseListViewModel: ObservableObject {
-    @Published var exercises = [FakeExercise]()
+@MainActor
+@Observable
+class ExerciseListViewModel {
+    var exercises = [Exercise]()
+    var errorMessage: String?
+    var hasError: Bool = false
 
-    var viewContext: NSManagedObjectContext
+    let viewContext: NSManagedObjectContext
+    private let repository: any ExerciseRepositoryProtocol
 
-    init(context: NSManagedObjectContext) {
+    init(context: NSManagedObjectContext, repository: (any ExerciseRepositoryProtocol)? = nil) {
         self.viewContext = context
-        fetchExercises()
+        self.repository = repository ?? ExerciseRepository(viewContext: context)
+        Task { await fetchExercises() }
     }
 
-    private func fetchExercises() {
-        // TODO: fetch data in CoreData and replace dumb value below with appropriate information
-        exercises = [FakeExercise(), FakeExercise(), FakeExercise()]
+    func fetchExercises() async {
+        do {
+            exercises = try repository.getExercise()
+        } catch {
+            self.errorMessage = AristaError.fetchFailed.localizedDescription
+            self.hasError = true
+        }
     }
-}
 
-struct FakeExercise: Identifiable {
-    var id = UUID()
-    
-    var category: String = "Football"
-    var duration: Int = 120
-    var intensity: Int = 8
-    var date: Date = Date()
+    func deleteExercise(at offsets: IndexSet) async {
+        do {
+            for index in offsets {
+                try repository.deleteExercise(exercises[index])
+            }
+            await fetchExercises()
+        } catch {
+            self.errorMessage = AristaError.saveFailed.localizedDescription
+            self.hasError = true
+        }
+    }
 }
