@@ -8,54 +8,64 @@
 import SwiftUI
 
 struct ExerciseListView: View {
-    @ObservedObject var viewModel: ExerciseListViewModel
+    var viewModel: ExerciseListViewModel
     @State private var showingAddExerciseView = false
     
     var body: some View {
-        NavigationView {
-            List(viewModel.exercises) { exercise in
-                HStack {
-                    Image(systemName: iconForCategory(exercise.category))
-                    VStack(alignment: .leading) {
-                        Text(exercise.category)
-                            .font(.headline)
-                        Text("Durée: \(exercise.duration) min")
-                            .font(.subheadline)
-                        Text(exercise.date.formatted())
-                            .font(.subheadline)
-                        
+        @Bindable var viewModel = viewModel
+        
+        NavigationStack {
+            List {
+                ForEach(viewModel.exercises, id: \.self) { exercise in
+                    HStack {
+                        Image(systemName: exercise.iconName)
+                        VStack(alignment: .leading) {
+                            Text(exercise.wrappedCategory)
+                                .font(.headline)
+                            Text("Durée: \(exercise.wrappedDuration) min")
+                                .font(.subheadline)
+                            Text(exercise.wrappedFormattedStartDate)
+                                .font(.subheadline)
+                            
+                        }
+                        Spacer()
+                        IntensityIndicator(intensity: Int(exercise.wrappedIntensity))
                     }
-                    Spacer()
-                    IntensityIndicator(intensity: exercise.intensity)
+                    .listRowBackground(Color.white.opacity(0.1))
+                }
+                .onDelete { offsets in
+                    Task { await viewModel.deleteExercise(at: offsets) }
+                }            }
+            .navigationTitle("Exercices")
+            .scrollContentBackground(.hidden)
+            .background {
+                LiquidGlassBackground()
+            }
+            .scrollContentBackground(.hidden)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingAddExerciseView = true
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.primary)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            .navigationTitle("Exercices")
-            .navigationBarItems(trailing: Button(action: {
-                showingAddExerciseView = true
-            }) {
-                Image(systemName: "plus")
-            })
+            .task {
+                await viewModel.fetchExercises()
+            }        }
+        .alert("Erreur", isPresented: $viewModel.hasError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage ?? "Une erreur inconnue est survenue.")
         }
-        .sheet(isPresented: $showingAddExerciseView) {
+        .sheet(isPresented: $showingAddExerciseView, onDismiss: {
+            Task { await viewModel.fetchExercises() }
+        }) {
             AddExerciseView(viewModel: AddExerciseViewModel(context: viewModel.viewContext))
-        }
-        
-    }
-    
-    func iconForCategory(_ category: String) -> String {
-        switch category {
-        case "Football":
-            return "sportscourt"
-        case "Natation":
-            return "waveform.path.ecg"
-        case "Running":
-            return "figure.run"
-        case "Marche":
-            return "figure.walk"
-        case "Cyclisme":
-            return "bicycle"
-        default:
-            return "questionmark"
         }
     }
 }
@@ -64,9 +74,14 @@ struct IntensityIndicator: View {
     var intensity: Int
     
     var body: some View {
-        Circle()
-            .fill(colorForIntensity(intensity))
-            .frame(width: 10, height: 10)
+        ZStack {
+            Circle()
+                .stroke(colorForIntensity(intensity), lineWidth: 5)
+                .foregroundColor(colorForIntensity(intensity))
+                .frame(width: 30, height: 30)
+            Text("\(intensity)")
+                .foregroundColor(colorForIntensity(intensity))
+        }
     }
     
     func colorForIntensity(_ intensity: Int) -> Color {
@@ -84,5 +99,5 @@ struct IntensityIndicator: View {
 }
 
 #Preview {
-    ExerciseListView(viewModel: ExerciseListViewModel(context: PersistenceController.preview.container.viewContext))
+    ExerciseListView(viewModel: ExerciseListViewModel(context: PersistenceController(inMemory: true).container.viewContext))
 }
