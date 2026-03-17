@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import SwiftUI
@@ -31,7 +32,7 @@ struct AddExerciseView: View {
                             displayedComponents: [.date, .hourAndMinute]
                         )
                         
-                        // Champ Durée avec label à gauche et saisie à droite
+                        // Duration field with label on the left and input on the right
                         HStack {
                             Text("Durée (en minutes)")
                             Spacer()
@@ -39,14 +40,24 @@ struct AddExerciseView: View {
                                 .multilineTextAlignment(.trailing)
                                 .keyboardType(.numberPad)
                         }
+                        if !viewModel.isDurationValid {
+                            Text("La durée doit être supérieure à 0")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                         
-                        // Champ Intensité avec label à gauche et saisie à droite
+                        // Intensity field with label on the left and input on the right
                         HStack {
                             Text("Intensité (0 à 10)")
                             Spacer()
                             TextField("Ex: 5", value: $viewModel.intensity, format: .number)
                                 .multilineTextAlignment(.trailing)
                                 .keyboardType(.numberPad)
+                        }
+                        if !viewModel.isIntensityValid {
+                            Text("L'intensité doit être comprise entre 0 et 10")
+                                .font(.caption)
+                                .foregroundColor(.red)
                         }
                     }
                     .listRowBackground(Color.white.opacity(0.1))
@@ -63,7 +74,9 @@ struct AddExerciseView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }
-                }.buttonStyle(.borderedProminent)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!viewModel.isFormValid)
             }
             .navigationTitle("Nouvel Exercice ...")
             .scrollContentBackground(.hidden)

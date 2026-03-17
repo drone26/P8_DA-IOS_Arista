@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import Foundation
@@ -22,7 +23,8 @@ class SleepHistoryViewModel {
         self.viewContext = context
         self.repository = repository ?? SleepRepository(viewContext: context)
     }
-
+    
+    /// Fetech sleep sessions
     func fetchSleepSessions() async {
         do {
             sleepSessions = try repository.getSleepSessions()

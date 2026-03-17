@@ -37,6 +37,7 @@ final class AddExerciseViewModelTests: XCTestCase {
     }
     
     func test_WhenAddingOneExerciseInDatabase_AddExercise_ReturnAListContainingTheExercise() async throws {
+        // Given
         _ = addUser(context: context, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
         
         let expectedCategory = ExerciseCategory.running
@@ -49,8 +50,10 @@ final class AddExerciseViewModelTests: XCTestCase {
         viewModel.intensity = expectedIntensity
         viewModel.startDate = testDate
         
+        // When
         let success = await viewModel.addExercise()
         
+        // Then
         XCTAssertTrue(success, "L'ajout d'exercice devrait réussir")
         
         let exercises = try exerciseRepository.getExercise()

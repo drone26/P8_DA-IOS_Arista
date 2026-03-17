@@ -38,7 +38,7 @@ final class PersistenceControllerTests: XCTestCase {
     // MARK: - Async Store Loading Failure Test
 
     func testLoadStoresFailure() async throws {
-        // Arrange
+        // Given
         // Use our mock container
         let mockContainer = MockFailingPersistentContainer(name: "Arista")
         let controller = PersistenceController(container: mockContainer)
@@ -46,13 +46,13 @@ final class PersistenceControllerTests: XCTestCase {
         XCTAssertFalse(controller.hasError, "Precondition: hasError should initially be false.")
         XCTAssertNil(controller.errorMessage, "Precondition: errorMessage should initially be nil.")
         
-        // Act
+        // When
         await controller.loadStores()
         
         // Allow the detached MainActor task time to update the UI state
         try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
         
-        // Assert
+        // Then
         XCTAssertTrue(controller.hasError, "hasError should be set to true because we passed a fake error.")
         XCTAssertEqual(
             controller.errorMessage,
@@ -64,10 +64,13 @@ final class PersistenceControllerTests: XCTestCase {
     // MARK: - Error Handling Tests
 
     func testHandleStoreError() {
+        // Given
         let controller = PersistenceController.shared
         
+        // When
         controller.handleStoreError()
         
+        // Then
         XCTAssertTrue(controller.hasError)
         XCTAssertEqual(controller.errorMessage, AristaError.persistenceFailure.localizedDescription)
     }
@@ -75,8 +78,10 @@ final class PersistenceControllerTests: XCTestCase {
     // MARK: - Initialization Tests
     
     func testSharedControllerInitialization() {
+        // Given / When
         let controller = PersistenceController.shared
         
+        // Then
         XCTAssertNotNil(controller.container)
         XCTAssertEqual(controller.container.name, "Arista")
         XCTAssertTrue(controller.container.viewContext.automaticallyMergesChangesFromParent)

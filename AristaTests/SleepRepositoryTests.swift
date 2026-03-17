@@ -45,21 +45,21 @@ final class SleepRepositoryTests: XCTestCase {
     }
     
     func test_WhenNoSleepIsInDatabase_GetSleepSessions_ReturnEmptyList() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
         let sleepRepository = SleepRepository(viewContext: persistenceController.container.viewContext)
         
+        // When
         let sleeps = try! sleepRepository.getSleepSessions()
         
+        // Then
         XCTAssert(sleeps.isEmpty == true)
     }
  
     func test_WhenAddingOneSleepInDatabase_GetSleepSessions_ReturnAListContainingTheSleeps() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
@@ -68,8 +68,10 @@ final class SleepRepositoryTests: XCTestCase {
         addSleep(context: persistenceController.container.viewContext, quality: 5, duration: 10, startDate: date, user: user1)
         
         let sleepRepository = SleepRepository(viewContext: persistenceController.container.viewContext)
+        // When
         let sleeps = try! sleepRepository.getSleepSessions()
         
+        // Then
         XCTAssert(sleeps.isEmpty == false)
         XCTAssert(sleeps.first?.duration == 10)
         XCTAssert(sleeps.first?.quality == 5)
@@ -77,8 +79,7 @@ final class SleepRepositoryTests: XCTestCase {
     }
     
     func test_WhenAddingMultipleSleepInDatabase_GetSleep_ReturnAListContainingTheSleepInTheRightOrder() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
@@ -96,8 +97,11 @@ final class SleepRepositoryTests: XCTestCase {
         addSleep(context: persistenceController.container.viewContext, quality: 8, duration: 10, startDate: date2, user: user)
         
         let sleepRepository = SleepRepository(viewContext: persistenceController.container.viewContext)
+        
+        // When
         let sleeps = try! sleepRepository.getSleepSessions()
         
+        // Then
         XCTAssert(sleeps.count == 3)
         XCTAssert(sleeps[0].quality == 1)
         XCTAssert(sleeps[1].quality == 8)
@@ -105,26 +109,25 @@ final class SleepRepositoryTests: XCTestCase {
     }
 
     func test_SleepWrappedProperties_WhenValuesAreNotDefined() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
-        // Create a user without setting optional properties
+        // When
         let sleep = Sleep(context: persistenceController.container.viewContext)
         sleep.id = UUID()
         
+        // Then
         XCTAssertEqual(sleep.wrappedQuality, 0, "Should return 0")
         XCTAssertEqual(sleep.wrappedDuration, 0, "Should return 0")
     }
     
     func test_SleepWrappedProperties_WhenValuesAreDefined() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
-        // Create a user without setting optional properties
+        // When
         let date = Date()
         let sleep = Sleep(context: persistenceController.container.viewContext)
         sleep.id = UUID()
@@ -132,6 +135,7 @@ final class SleepRepositoryTests: XCTestCase {
         sleep.quality = 5
         sleep.startDate = date
         
+        // Then
         XCTAssertEqual(sleep.wrappedQuality, 5)
         XCTAssertEqual(sleep.wrappedDuration, 60)
         XCTAssertEqual(sleep.wrappedStartDate, date)

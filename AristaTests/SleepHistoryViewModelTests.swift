@@ -17,19 +17,21 @@ final class SleepHistoryViewModelTests: XCTestCase {
     var repository: SleepRepository!
     
     func test_WhenNoSleepSessionIsInDatabase_FetchSleepSessions_ReturnEmptyList() async {
-        
+        // Given
         persistenceController = makeTestPersistenceController()
         let context = persistenceController.container.viewContext
         emptyEntities(context: context)
         
         viewModel = SleepHistoryViewModel(context: context)
+        // When
         await viewModel.fetchSleepSessions()
         
+        // Then
         XCTAssertTrue(viewModel.sleepSessions.isEmpty, "The sleep session list should be empty.")
     }
     
     func test_WhenAddingMultipleSleepSessionInDatabase_FetchSleepSessions_ReturnAListContainingTheSleepSessionsInTheRightOrder() async {
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         let context = persistenceController.container.viewContext
         emptyEntities(context: context)
@@ -57,7 +59,10 @@ final class SleepHistoryViewModelTests: XCTestCase {
         
         viewModel = SleepHistoryViewModel(context: context)
         
+        // When
         await viewModel.fetchSleepSessions()
+        
+        // Then
         XCTAssert(viewModel.sleepSessions.count == 3)
         XCTAssert(viewModel.sleepSessions[0].duration == 600)
         XCTAssert(viewModel.sleepSessions[1].duration == 6000)

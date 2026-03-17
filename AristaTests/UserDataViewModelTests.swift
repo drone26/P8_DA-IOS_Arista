@@ -44,13 +44,13 @@ final class UserDataViewModelTests: XCTestCase {
     // MARK: - Error path
 
     func test_WhenRepositoryThrows_FetchUserData_SetsHasError() async throws {
-        // Arrange
+        // Given
         let viewModel = UserDataViewModel(context: context, repository: FailingUserRepository())
 
-        // Act : Nous devons maintenant appeler la méthode explicitement
+        // When
         await viewModel.fetchUserData()
 
-        // Assert
+        // Then
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
         XCTAssertEqual(viewModel.firstName, "")
@@ -62,13 +62,13 @@ final class UserDataViewModelTests: XCTestCase {
     // MARK: - Nil user path (no error, properties stay empty)
 
     func test_WhenNoUserExists_FetchUserData_PropertiesStayEmpty() async throws {
-        // Arrange
+        // Given
         let viewModel = UserDataViewModel(context: context, repository: EmptyUserRepository())
 
-        // Act
+        // When
         await viewModel.fetchUserData()
 
-        // Assert
+        // Then
         XCTAssertFalse(viewModel.hasError)
         XCTAssertNil(viewModel.errorMessage)
         XCTAssertEqual(viewModel.firstName, "")
@@ -78,7 +78,7 @@ final class UserDataViewModelTests: XCTestCase {
     // MARK: - Nominal path
 
     func test_WhenUserExists_FetchUserData_PopulatesProperties() async throws {
-        // Arrange : Add a real user to the in-memory store
+        // Given
         let user = User(context: context)
         user.firstName = "Charlotte"
         user.lastName = "Razoul"
@@ -89,10 +89,10 @@ final class UserDataViewModelTests: XCTestCase {
 
         let viewModel = UserDataViewModel(context: context)
 
-        // Act
+        // When
         await viewModel.fetchUserData()
 
-        // Assert
+        // Then
         XCTAssertFalse(viewModel.hasError)
         XCTAssertEqual(viewModel.firstName, "Charlotte")
         XCTAssertEqual(viewModel.lastName, "Razoul")

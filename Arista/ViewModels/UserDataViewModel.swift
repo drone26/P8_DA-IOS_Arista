@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import Foundation
@@ -25,7 +26,8 @@ class UserDataViewModel {
         self.viewContext = context
         self.repository = repository ?? UserRepository(viewContext: context)
     }
-
+    
+    /// Fetch User data / information
     func fetchUserData() async {
         do {
             if let user = try repository.getUser() {

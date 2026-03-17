@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import SwiftUI
@@ -42,9 +43,6 @@ struct AristaApp: App {
             } message: {
                 Text(bindableController.errorMessage ?? "Une erreur critique est survenue avec la base de données.")
             }
-            // loadStores() is called here so it can be awaited properly.
-            // Keeping it out of PersistenceController.init() prevents
-            // uncontrolled Tasks that race with tests or the SwiftUI lifecycle.
             .task {
                 await persistenceController.loadStores()
             }

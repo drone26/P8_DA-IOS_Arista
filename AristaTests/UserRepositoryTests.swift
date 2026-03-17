@@ -35,13 +35,13 @@ final class UserRepositoryTests: XCTestCase {
     }
     
     func test_WhenNoUserIsInDatabase_GetUser_ReturnEmptyList() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
         let userRepository = UserRepository(viewContext: persistenceController.container.viewContext)
         
+        // When / Then
         do {
             let user = try userRepository.getUser()
             XCTAssertNil(user, "The result should be nil when no user exists in the database.")
@@ -51,12 +51,13 @@ final class UserRepositoryTests: XCTestCase {
     }
     
     func test_WhenAddingOneUserInDatabase_GetUser_ReturnAListContainingTheUser() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
         let userRepository = UserRepository(viewContext: persistenceController.container.viewContext)
+        
+        // When / Then
         do {
             _ = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
             let user = try userRepository.getUser()
@@ -68,20 +69,20 @@ final class UserRepositoryTests: XCTestCase {
             XCTFail("Fetching user failed with error: \(error)")
         }
     }
-
-     func test_UserWrappedProperties_WhenValuesAreNotDefined() {
-     
-     // Clean manually all data
-     persistenceController = makeTestPersistenceController()
-     emptyEntities(context: persistenceController.container.viewContext)
-     
-     // Create a user without setting optional properties
-     let user = User(context: persistenceController.container.viewContext)
-     user.id = UUID()
-     
-     XCTAssertEqual(user.wrappedFirstName, "", "Should return empty string when firstName is nil")
-     XCTAssertEqual(user.wrappedLastName, "", "Should return empty string when lastName is nil")
-     XCTAssertEqual(user.wrappedEmail, "", "Should return empty string when email is nil")
-     XCTAssertEqual(user.wrappedPassword, "", "Should return empty string when password is nil")
-     }
+    
+    func test_UserWrappedProperties_WhenValuesAreNotDefined() {
+        // Given
+        persistenceController = makeTestPersistenceController()
+        emptyEntities(context: persistenceController.container.viewContext)
+        
+        // When
+        let user = User(context: persistenceController.container.viewContext)
+        user.id = UUID()
+        
+        // Then
+        XCTAssertEqual(user.wrappedFirstName, "", "Should return empty string when firstName is nil")
+        XCTAssertEqual(user.wrappedLastName, "", "Should return empty string when lastName is nil")
+        XCTAssertEqual(user.wrappedEmail, "", "Should return empty string when email is nil")
+        XCTAssertEqual(user.wrappedPassword, "", "Should return empty string when password is nil")
+    }
 }

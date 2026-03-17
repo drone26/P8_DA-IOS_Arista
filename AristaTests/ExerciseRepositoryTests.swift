@@ -46,21 +46,21 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_WhenNoExerciseIsInDatabase_GetExercise_ReturnEmptyList() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         
+        // When
         let exercises = try! exerciseRepository.getExercise()
         
+        // Then
         XCTAssert(exercises.isEmpty == true)
     }
     
     func test_WhenAddingOneExerciseInDatabase_GetExercise_ReturnAListContainingTheExercise() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
@@ -69,8 +69,10 @@ final class ExerciseRepositoryTests: XCTestCase {
         addExercice(context: persistenceController.container.viewContext, category: "Football", duration: 10, intensity: 5, startDate: date, user: user1)
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
+        // When
         let exercises = try! exerciseRepository.getExercise()
         
+        // Then
         XCTAssert(exercises.isEmpty == false)
         XCTAssert(exercises.first?.category == "Football")
         XCTAssert(exercises.first?.duration == 10)
@@ -79,14 +81,14 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_WhenAddingOneExerciseInDatabase_AddExercise_ReturnAListContainingTheExercise() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
         let date = Date()
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         let user1 = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
+        // When / Then
         do {
             try exerciseRepository.addExercise(category: "Football", duration: 10, intensity: 5, startDate: date, user: user1)
             let exercises = try exerciseRepository.getExercise()
@@ -103,8 +105,7 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_WhenAddingMultipleExerciseInDatabase_GetExercise_ReturnAListContainingTheExerciseInTheRightOrder() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
@@ -137,8 +138,10 @@ final class ExerciseRepositoryTests: XCTestCase {
                     user: user)
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
+        // When
         let exercises = try! exerciseRepository.getExercise()
         
+        // Then
         XCTAssert(exercises.count == 3)
         XCTAssert(exercises[0].wrappedCategory == "Football")
         XCTAssert(exercises[1].wrappedCategory == "Fitness")
@@ -146,8 +149,7 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_WhenDeletingMultipleExerciseInDatabase_DeleteExercise_ReturnEmptyList() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
@@ -181,6 +183,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         
+        // When / Then
         do {
             var exercises = try! exerciseRepository.getExercise()
             try exerciseRepository.deleteExercise(exercises[2])
@@ -194,15 +197,16 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_ExerciseWrappedProperties_WhenValuesAreNotDefined() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
+        // When
         // Create a user without setting optional properties
         let exercice = Exercise(context: persistenceController.container.viewContext)
         exercice.id = UUID()
         
+        // Then
         XCTAssertEqual(exercice.wrappedCategory, "Free")
         XCTAssertEqual(exercice.wrappedDuration, 0)
         XCTAssertEqual(exercice.wrappedIntensity, 0)
@@ -210,11 +214,11 @@ final class ExerciseRepositoryTests: XCTestCase {
     }
     
     func test_ExerciseWrappedProperties_WhenValuesAreDefined() {
-        
-        // Clean manually all data
+        // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
         
+        // When
         // Create a user without setting optional properties
         let date = Date()
         let exercice = Exercise(context: persistenceController.container.viewContext)
@@ -224,6 +228,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         exercice.intensity = 7
         exercice.startDate = date
         
+        // Then
         XCTAssertEqual(exercice.wrappedCategory, "Football")
         XCTAssertEqual(exercice.wrappedDuration, 45)
         XCTAssertEqual(exercice.wrappedIntensity, 7)

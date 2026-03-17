@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import SwiftUI
@@ -26,7 +27,6 @@ struct ExerciseListView: View {
                                 .font(.subheadline)
                             Text(exercise.wrappedFormattedStartDate)
                                 .font(.subheadline)
-                            
                         }
                         Spacer()
                         IntensityIndicator(intensity: Int(exercise.wrappedIntensity))

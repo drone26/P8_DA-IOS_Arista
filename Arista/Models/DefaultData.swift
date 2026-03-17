@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Mathieu ARRIO on 10/03/2026.
+//  Modified by Mathieu Arrio on 06/03/2026.
 //
 
 import Foundation

@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import CoreData
@@ -24,6 +25,7 @@ class ExerciseListViewModel {
         Task { await fetchExercises() }
     }
 
+    /// Fetch exercises
     func fetchExercises() async {
         do {
             exercises = try repository.getExercise()
@@ -32,7 +34,9 @@ class ExerciseListViewModel {
             self.hasError = true
         }
     }
-
+    
+    /// Delete an exercise
+    /// - Parameter offsets: index of the exercise to delete
     func deleteExercise(at offsets: IndexSet) async {
         do {
             for index in offsets {

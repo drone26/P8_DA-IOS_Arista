@@ -7,13 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3945507E2F609FE5000B36D1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3945507B2F609FE5000B36D1 /* Persistence.swift */; };
-		3945507F2F609FE5000B36D1 /* ExerciseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3945507A2F609FE5000B36D1 /* ExerciseRepository.swift */; };
-		394550802F609FE5000B36D1 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3945507D2F609FE5000B36D1 /* UserRepository.swift */; };
-		394550812F609FE5000B36D1 /* SleepRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3945507C2F609FE5000B36D1 /* SleepRepository.swift */; };
-		394550832F60A019000B36D1 /* DefaultData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394550822F60A019000B36D1 /* DefaultData.swift */; };
-		394550852F60A49A000B36D1 /* AristaError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394550842F60A49A000B36D1 /* AristaError.swift */; };
-		399F4FE92F654DF40001FBCC /* RepositoryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399F4FE82F654DF40001FBCC /* RepositoryProtocols.swift */; };
 		53E587312B235E8F00E4EF99 /* AristaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E587302B235E8F00E4EF99 /* AristaApp.swift */; };
 		53E587352B235E9000E4EF99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E587342B235E9000E4EF99 /* Assets.xcassets */; };
 		53E587382B235E9000E4EF99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E587372B235E9000E4EF99 /* Preview Assets.xcassets */; };
@@ -31,13 +24,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3945507A2F609FE5000B36D1 /* ExerciseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepository.swift; sourceTree = "<group>"; };
-		3945507B2F609FE5000B36D1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		3945507C2F609FE5000B36D1 /* SleepRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRepository.swift; sourceTree = "<group>"; };
-		3945507D2F609FE5000B36D1 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
-		394550822F60A019000B36D1 /* DefaultData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultData.swift; sourceTree = "<group>"; };
-		394550842F60A49A000B36D1 /* AristaError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AristaError.swift; sourceTree = "<group>"; };
-		399F4FE82F654DF40001FBCC /* RepositoryProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryProtocols.swift; sourceTree = "<group>"; };
 		53E5872D2B235E8F00E4EF99 /* Arista.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Arista.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E587302B235E8F00E4EF99 /* AristaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AristaApp.swift; sourceTree = "<group>"; };
 		53E587342B235E9000E4EF99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -47,6 +33,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		391FC1F02F69DA8500018765 /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
 		39A0775A2F61644000E35FBF /* AristaTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AristaTests; sourceTree = "<group>"; };
 		39A077602F61644800E35FBF /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
 		39A077692F61644B00E35FBF /* ViewModels */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModels; sourceTree = "<group>"; };
@@ -93,7 +80,7 @@
 			children = (
 				39A077692F61644B00E35FBF /* ViewModels */,
 				39A077602F61644800E35FBF /* Views */,
-				53E5875F2B235FD200E4EF99 /* Models */,
+				391FC1F02F69DA8500018765 /* Models */,
 				53E587302B235E8F00E4EF99 /* AristaApp.swift */,
 				53E587342B235E9000E4EF99 /* Assets.xcassets */,
 				53E5873B2B235E9000E4EF99 /* Arista.xcdatamodeld */,
@@ -108,20 +95,6 @@
 				53E587372B235E9000E4EF99 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		53E5875F2B235FD200E4EF99 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				3945507A2F609FE5000B36D1 /* ExerciseRepository.swift */,
-				3945507B2F609FE5000B36D1 /* Persistence.swift */,
-				3945507C2F609FE5000B36D1 /* SleepRepository.swift */,
-				3945507D2F609FE5000B36D1 /* UserRepository.swift */,
-				394550822F60A019000B36D1 /* DefaultData.swift */,
-				394550842F60A49A000B36D1 /* AristaError.swift */,
-				399F4FE82F654DF40001FBCC /* RepositoryProtocols.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +113,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				391FC1F02F69DA8500018765 /* Models */,
 				39A077602F61644800E35FBF /* Views */,
 				39A077692F61644B00E35FBF /* ViewModels */,
 			);
@@ -231,15 +205,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				394550832F60A019000B36D1 /* DefaultData.swift in Sources */,
 				53E587312B235E8F00E4EF99 /* AristaApp.swift in Sources */,
 				53E5873D2B235E9000E4EF99 /* Arista.xcdatamodeld in Sources */,
-				394550852F60A49A000B36D1 /* AristaError.swift in Sources */,
-				3945507E2F609FE5000B36D1 /* Persistence.swift in Sources */,
-				3945507F2F609FE5000B36D1 /* ExerciseRepository.swift in Sources */,
-				394550802F609FE5000B36D1 /* UserRepository.swift in Sources */,
-				394550812F609FE5000B36D1 /* SleepRepository.swift in Sources */,
-				399F4FE92F654DF40001FBCC /* RepositoryProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -86,19 +86,22 @@ final class ViewModelErrorTests: XCTestCase {
     // MARK: - ExerciseListViewModel
     
     func test_WhenRepositoryThrows_FetchExercises_SetsHasError() async throws {
+        // Given
         let viewModel = ExerciseListViewModel(
             context: context,
             repository: FailingExerciseRepository()
         )
+        // When
         await viewModel.fetchExercises()
         
+        // Then
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
         XCTAssertTrue(viewModel.exercises.isEmpty)
     }
     
     func test_WhenRepositoryThrowsOnDelete_DeleteExercise_SetsHasError() async throws {
-        // Seed one real exercise so exercises[0] exists
+        // Given
         let user = makeUser()
         let exercise = makeExercise(user: user)
         try context.save()
@@ -109,8 +112,10 @@ final class ViewModelErrorTests: XCTestCase {
         )
         viewModel.exercises = [exercise]
         
+        // When
         await viewModel.deleteExercise(at: IndexSet(integer: 0))
         
+        // Then
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
     }
@@ -118,12 +123,15 @@ final class ViewModelErrorTests: XCTestCase {
     // MARK: - SleepHistoryViewModel
     
     func test_WhenRepositoryThrows_FetchSleepSessions_SetsHasError() async throws {
+        // Given
         let viewModel = SleepHistoryViewModel(
             context: context,
             repository: FailingSleepRepository()
         )
+        // When
         await viewModel.fetchSleepSessions()
         
+        // Then
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
         XCTAssertTrue(viewModel.sleepSessions.isEmpty)
@@ -132,32 +140,35 @@ final class ViewModelErrorTests: XCTestCase {
     // MARK: - AddExerciseViewModel
     
     func test_WhenNoUserExists_AddExercise_ReturnsFalseWithFetchError() async throws {
+        // Given
         let viewModel = AddExerciseViewModel(
             context: context,
             userRepository: EmptyUserRepository()
         )
-        
+        // When
         let success = await viewModel.addExercise()
-        
+        // Then
         XCTAssertFalse(success)
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
     }
     
     func test_WhenUserFetchThrows_AddExercise_ReturnsFalseWithSaveError() async throws {
+        // Given
         let viewModel = AddExerciseViewModel(
             context: context,
             userRepository: FailingUserRepository()
         )
-        
+        // When
         let success = await viewModel.addExercise()
-        
+        // Then
         XCTAssertFalse(success)
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
     }
     
     func test_WhenExerciseSaveFails_AddExercise_ReturnsFalseWithSaveError() async throws {
+        // Given
         let user = makeUser()
         try context.save()
         
@@ -169,29 +180,16 @@ final class ViewModelErrorTests: XCTestCase {
         viewModel.category = .running
         viewModel.duration = 30
         viewModel.intensity = 5
-        
+        // When
         let success = await viewModel.addExercise()
-        
+        // Then
         XCTAssertFalse(success)
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
     }
-/*
-    func test_HandleStoreError_SetsErrorState() {
-        let controller = makeTestPersistenceController()
-        
-        controller.handleStoreError()
-        
-        XCTAssertTrue(controller.hasError)
-        XCTAssertEqual(
-            controller.errorMessage,
-            AristaError.persistenceFailure.localizedDescription
-        )
-    }
-*/
+
     // MARK: - Helpers
     
-    @discardableResult
     private func makeUser() -> User {
         let user = User(context: context)
         user.firstName = "Test"
@@ -202,7 +200,6 @@ final class ViewModelErrorTests: XCTestCase {
         return user
     }
     
-    @discardableResult
     private func makeExercise(user: User) -> Exercise {
         let exercise = Exercise(context: context)
         exercise.category = "Running"

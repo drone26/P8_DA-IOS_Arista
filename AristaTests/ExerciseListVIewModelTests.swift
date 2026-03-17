@@ -29,13 +29,17 @@ final class ExerciseListViewModelTests: XCTestCase {
     // MARK: - Fetch tests
 
     func test_WhenNoExerciseIsInDatabase_FetchExercise_ReturnEmptyList() async throws {
+        // Given
         viewModel = ExerciseListViewModel(context: persistenceController.container.viewContext)
+        // When
         await viewModel.fetchExercises()
 
+        // Then
         XCTAssertTrue(viewModel.exercises.isEmpty)
     }
 
     func test_WhenAddingOneExercise_FetchExercise_ReturnAListContainingTheExercise() async throws {
+        // Given
         let context = persistenceController.container.viewContext
         let date = Date()
         let user = addUser(context: context, firstName: "Eric", lastName: "Marcus",
@@ -44,8 +48,10 @@ final class ExerciseListViewModelTests: XCTestCase {
                     intensity: 5, startDate: date, user: user)
 
         viewModel = ExerciseListViewModel(context: context)
+        // When
         await viewModel.fetchExercises()
 
+        // Then
         XCTAssertFalse(viewModel.exercises.isEmpty)
         XCTAssertEqual(viewModel.exercises.first?.category, "Football")
         XCTAssertEqual(viewModel.exercises.first?.duration, 10)
@@ -54,6 +60,7 @@ final class ExerciseListViewModelTests: XCTestCase {
     }
 
     func test_WhenAddingMultipleExercises_FetchExercise_ReturnListInReverseChronologicalOrder() async throws {
+        // Given
         let context = persistenceController.container.viewContext
         let date1 = Date()
         let date2 = Date(timeIntervalSinceNow: -(60*60*24))
@@ -67,8 +74,10 @@ final class ExerciseListViewModelTests: XCTestCase {
         addExercise(context: context, category: "Fitness",  duration: 30,  intensity: 5, startDate: date2, user: u3)
 
         viewModel = ExerciseListViewModel(context: context)
+        // When
         await viewModel.fetchExercises()
 
+        // Then
         XCTAssertEqual(viewModel.exercises.count, 3)
         XCTAssertEqual(viewModel.exercises[0].category, "Football") // date1 — most recent
         XCTAssertEqual(viewModel.exercises[1].category, "Fitness")  // date2
@@ -78,38 +87,47 @@ final class ExerciseListViewModelTests: XCTestCase {
     // MARK: - Delete tests
 
     func test_WhenDeletingOneExercise_ExercisesListHasOneFewerItem() async throws {
+        // Given
         let context = persistenceController.container.viewContext
         let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
         addExercise(context: context, category: "Running",  duration: 30, intensity: 3, startDate: Date(timeIntervalSinceNow: -3600), user: user)
 
         viewModel = ExerciseListViewModel(context: context)
+        // When
         await viewModel.fetchExercises()
+        
+        // Then
         XCTAssertEqual(viewModel.exercises.count, 2)
 
+        // When
         await viewModel.deleteExercise(at: IndexSet(integer: 0))
 
-        // fetchExercises() is called inside deleteExercise — list reflects DB state
+        // Then
         XCTAssertEqual(viewModel.exercises.count, 1)
         XCTAssertFalse(viewModel.hasError)
     }
 
     func test_WhenDeletingOneExercise_CorrectExerciseIsRemoved() async throws {
+        // Given
         let context = persistenceController.container.viewContext
         let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
         addExercise(context: context, category: "Running",  duration: 30, intensity: 3, startDate: Date(timeIntervalSinceNow: -3600), user: user)
 
         viewModel = ExerciseListViewModel(context: context)
+        // When
         await viewModel.fetchExercises()
 
         // exercises[0] is "Football" (most recent) — delete it
         await viewModel.deleteExercise(at: IndexSet(integer: 0))
-
+        
+        // Then
         XCTAssertEqual(viewModel.exercises.first?.category, "Running")
     }
 
     func test_WhenDeletingAllExercises_ExerciseListIsEmpty() async throws {
+        // Given
         let context = persistenceController.container.viewContext
         let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
@@ -117,34 +135,39 @@ final class ExerciseListViewModelTests: XCTestCase {
         addExercise(context: context, category: "Fitness",  duration: 45, intensity: 7, startDate: Date(timeIntervalSinceNow: -7200), user: user)
 
         viewModel = ExerciseListViewModel(context: context)
+        
+        // When
         await viewModel.fetchExercises()
+        // Then
         XCTAssertEqual(viewModel.exercises.count, 3)
 
+        // When
         await viewModel.deleteExercise(at: IndexSet(viewModel.exercises.indices))
 
+        // Then
         XCTAssertTrue(viewModel.exercises.isEmpty)
         XCTAssertFalse(viewModel.hasError)
     }
 
     func test_WhenDeletingExercise_FetchExercisesIsCalledAfterDeletion() async throws {
-        // Verifies that the list is refreshed from the DB after deletion,
-        // not just mutated in memory.
+        // Given
         let context = persistenceController.container.viewContext
         let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
 
         viewModel = ExerciseListViewModel(context: context)
+        // When
         await viewModel.fetchExercises()
 
         await viewModel.deleteExercise(at: IndexSet(integer: 0))
 
-        // If fetchExercises() was not called, the in-memory array would still
-        // hold stale data. An empty list proves the DB was re-queried.
+        // Then
         XCTAssertTrue(viewModel.exercises.isEmpty)
 
-        // Also confirm the DB itself is empty via an independent repository
+        // When
         let repo = ExerciseRepository(viewContext: context)
         let remaining = try repo.getExercise()
+        // Then
         XCTAssertTrue(remaining.isEmpty)
     }
 
@@ -156,7 +179,6 @@ final class ExerciseListViewModelTests: XCTestCase {
         try! context.save()
     }
 
-    @discardableResult
     private func addUser(context: NSManagedObjectContext, firstName: String, lastName: String,
                          email: String, password: String) -> User {
         let user = User(context: context)

@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import Foundation
@@ -18,11 +19,11 @@ class AddExerciseViewModel {
     var intensity: Int = 0
     var errorMessage: String?
     var hasError: Bool = false
-
+    
     let viewContext: NSManagedObjectContext
     private let exerciseRepository: any ExerciseRepositoryProtocol
     private let userRepository: any UserRepositoryProtocol
-
+    
     init(context: NSManagedObjectContext,
          exerciseRepository: (any ExerciseRepositoryProtocol)? = nil,
          userRepository: (any UserRepositoryProtocol)? = nil) {
@@ -30,7 +31,10 @@ class AddExerciseViewModel {
         self.exerciseRepository = exerciseRepository ?? ExerciseRepository(viewContext: context)
         self.userRepository = userRepository ?? UserRepository(viewContext: context)
     }
-
+    
+    
+    /// Add an exercise
+    /// - Returns: add is done ?
     func addExercise() async -> Bool {
         do {
             guard let user = try userRepository.getUser() else {
@@ -51,5 +55,20 @@ class AddExerciseViewModel {
             self.hasError = true
             return false
         }
+    }
+    
+    // Duration validator
+    var isDurationValid: Bool {
+        duration > 0
+    }
+    
+    // Intensity validator
+    var isIntensityValid: Bool {
+        (0...10).contains(intensity)
+    }
+    
+    // Form validator
+    var isFormValid: Bool {
+        isDurationValid && isIntensityValid
     }
 }

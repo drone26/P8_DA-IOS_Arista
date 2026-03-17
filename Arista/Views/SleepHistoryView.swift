@@ -3,6 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import SwiftUI
@@ -35,7 +36,7 @@ struct SleepHistoryView: View {
             }
         }
         .task {
-            // Demande le chargement des données quand la vue apparaît
+            // Fetch sleep sessions when view appear
             await viewModel.fetchSleepSessions()
         }
         
