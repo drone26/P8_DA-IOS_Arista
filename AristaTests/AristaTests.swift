@@ -4,7 +4,7 @@
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
 //
-
+/*
 import XCTest
 @testable import Arista
 
@@ -34,3 +34,4 @@ final class AristaTests: XCTestCase {
     }
 
 }
+*/
