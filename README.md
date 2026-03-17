@@ -13,3 +13,6 @@ Arista est une application iOS native permettant de suivre les activités physiq
 - **Design Pattern** : Pattern Repository pour découpler la logique de données des ViewModels.
 - **Concurrence** : Optimisé pour Swift 6 avec isolation @MainActor.
 - **Tests** : Suite complète de XCTests pour les models et viewmodels couvrant les cas nominaux et d'erreurs.
+
+## Changelog
+- Généré par git cliff.
