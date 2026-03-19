@@ -63,6 +63,79 @@ final class AddExerciseViewModelTests: XCTestCase {
         XCTAssertEqual(exercises.first?.intensity, Int64(expectedIntensity))
     }
     
+    // MARK: - Duration Validator
+
+    func test_WhenDurationIsZero_isDurationValid_ReturnsFalse() {
+        viewModel.duration = 0
+        XCTAssertFalse(viewModel.isDurationValid)
+    }
+
+    func test_WhenDurationIsNegative_isDurationValid_ReturnsFalse() {
+        viewModel.duration = -5
+        XCTAssertFalse(viewModel.isDurationValid)
+    }
+
+    func test_WhenDurationIsPositive_isDurationValid_ReturnsTrue() {
+        viewModel.duration = 1
+        XCTAssertTrue(viewModel.isDurationValid)
+
+        viewModel.duration = 60
+        XCTAssertTrue(viewModel.isDurationValid)
+    }
+
+    // MARK: - Intensity Validator
+
+    func test_WhenIntensityIsNegative_isIntensityValid_ReturnsFalse() {
+        viewModel.intensity = -1
+        XCTAssertFalse(viewModel.isIntensityValid)
+    }
+
+    func test_WhenIntensityIsAboveTen_isIntensityValid_ReturnsFalse() {
+        viewModel.intensity = 11
+        XCTAssertFalse(viewModel.isIntensityValid)
+    }
+
+    func test_WhenIntensityIsZero_isIntensityValid_ReturnsTrue() {
+        viewModel.intensity = 0
+        XCTAssertTrue(viewModel.isIntensityValid)
+    }
+
+    func test_WhenIntensityIsTen_isIntensityValid_ReturnsTrue() {
+        viewModel.intensity = 10
+        XCTAssertTrue(viewModel.isIntensityValid)
+    }
+
+    func test_WhenIntensityIsMidRange_isIntensityValid_ReturnsTrue() {
+        viewModel.intensity = 5
+        XCTAssertTrue(viewModel.isIntensityValid)
+    }
+
+    // MARK: - Form Validator
+
+    func test_WhenDurationAndIntensityAreValid_isFormValid_ReturnsTrue() {
+        viewModel.duration = 30
+        viewModel.intensity = 5
+        XCTAssertTrue(viewModel.isFormValid)
+    }
+
+    func test_WhenDurationIsInvalid_isFormValid_ReturnsFalse() {
+        viewModel.duration = 0
+        viewModel.intensity = 5
+        XCTAssertFalse(viewModel.isFormValid)
+    }
+
+    func test_WhenIntensityIsInvalid_isFormValid_ReturnsFalse() {
+        viewModel.duration = 30
+        viewModel.intensity = -1
+        XCTAssertFalse(viewModel.isFormValid)
+    }
+
+    func test_WhenBothAreInvalid_isFormValid_ReturnsFalse() {
+        viewModel.duration = 0
+        viewModel.intensity = 11
+        XCTAssertFalse(viewModel.isFormValid)
+    }
+
     // MARK: - Helpers
     
     private func emptyEntities(context: NSManagedObjectContext) {
