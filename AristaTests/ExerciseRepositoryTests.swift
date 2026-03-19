@@ -200,19 +200,40 @@ final class ExerciseRepositoryTests: XCTestCase {
         // Given
         persistenceController = makeTestPersistenceController()
         emptyEntities(context: persistenceController.container.viewContext)
-        
+
         // When
-        // Create a user without setting optional properties
+        // Create an exercise without setting optional properties
         let exercice = Exercise(context: persistenceController.container.viewContext)
         exercice.id = UUID()
-        
+
         // Then
         XCTAssertEqual(exercice.wrappedCategory, "Free")
         XCTAssertEqual(exercice.wrappedDuration, 0)
         XCTAssertEqual(exercice.wrappedIntensity, 0)
         XCTAssertEqual(exercice.iconName, "figure.run.square.stack")
+        // wrappedStartDate falls back to Date() when startDate is nil
+        XCTAssertNotNil(exercice.wrappedStartDate)
+        XCTAssertFalse(exercice.wrappedFormattedStartDate.isEmpty)
     }
     
+    func test_ExerciseCategoryId_ReturnsRawValue() {
+        // Given / When / Then
+        for category in ExerciseCategory.allCases {
+            XCTAssertEqual(category.id, category.rawValue)
+        }
+    }
+
+    func test_ExerciseRepositoryDefaultInit_UsesSharedContext() {
+        // Given / When
+        let repository = ExerciseRepository()
+
+        // Then — the default init uses PersistenceController.shared
+        XCTAssertEqual(
+            repository.viewContext,
+            PersistenceController.shared.container.viewContext
+        )
+    }
+
     func test_ExerciseWrappedProperties_WhenValuesAreDefined() {
         // Given
         persistenceController = makeTestPersistenceController()
