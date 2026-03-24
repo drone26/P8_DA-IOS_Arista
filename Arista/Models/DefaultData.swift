@@ -16,6 +16,7 @@ struct DefaultData {
         self.viewContext = viewContext
     }
     
+    /// Apply default data to CoreData instance
     func apply() throws {
         let userRepository = UserRepository(viewContext: viewContext)
         let sleepRepository = SleepRepository(viewContext: viewContext)

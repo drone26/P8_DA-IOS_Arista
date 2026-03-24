@@ -37,6 +37,8 @@ struct UserRepository {
         self.viewContext = viewContext
     }
     
+    /// Get only the first user
+    /// - Returns: user fetched
     func getUser() throws -> User? {
         let request = User.fetchRequest()
         request.fetchLimit = 1

@@ -10,8 +10,6 @@ import CoreData
 import Combine
 @testable import Arista
 
-// @MainActor matches the isolation of AddExerciseViewModel, allowing direct
-// await calls on its async methods without crossing actor boundaries.
 @MainActor
 final class AddExerciseViewModelTests: XCTestCase {
     var persistenceController: PersistenceController!

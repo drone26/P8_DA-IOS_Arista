@@ -3,7 +3,7 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
-//  Modified by Mathieu Arrio on 06/03/2026.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import CoreData
@@ -37,6 +37,7 @@ class PersistenceController {
     
     // MARK: - Production store loading
     
+    /// Load CoreData Store
     func loadStores() async {
         // Use withCheckedContinuation to bridge the completion handler to async/await
         let storeLoadedSuccessfully: Bool = await withCheckedContinuation { continuation in

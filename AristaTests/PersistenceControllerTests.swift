@@ -1,3 +1,10 @@
+//
+//  PersistenceControllerTests.swift
+//  PersistenceControllerTests
+//
+//  Created by Mathieu ARRIO on 13/03/2026.
+//
+
 import XCTest
 import CoreData
 @testable import Arista
