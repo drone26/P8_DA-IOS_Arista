@@ -16,6 +16,8 @@
 - Ajouter le README détaillé en français
 - Add comments
 - Add CHANGELOG
+- Update CHANGELOG
+- Add comments
 
 ### 🧪 Testing
 
