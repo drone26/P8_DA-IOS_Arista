@@ -39,26 +39,20 @@ class PersistenceController {
     
     /// Load CoreData Store
     func loadStores() async {
-        // Use withCheckedContinuation to bridge the completion handler to async/await
-        let storeLoadedSuccessfully: Bool = await withCheckedContinuation { continuation in
-            container.loadPersistentStores { [weak self] _, error in
-                if error != nil {
-                    // If an error occurred, handle it on the main actor
-                    Task { @MainActor [weak self] in
-                        self?.handleStoreError()
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                container.loadPersistentStores { _, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: ())
                     }
-                    // Signal to the continuation that store loading failed
-                    continuation.resume(returning: false)
-                } else {
-                    // If no error, signal success
-                    continuation.resume(returning: true)
                 }
             }
-        }
-        
-        // Only attempt to apply default data if the persistent stores loaded successfully
-        if storeLoadedSuccessfully {
+            // Store loaded successfully → apply default data
             try? DefaultData(viewContext: container.viewContext).apply()
+        } catch {
+            handleStoreError()
         }
     }
     
