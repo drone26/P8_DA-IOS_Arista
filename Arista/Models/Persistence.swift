@@ -42,7 +42,7 @@ class PersistenceController {
         // Use withCheckedContinuation to bridge the completion handler to async/await
         let storeLoadedSuccessfully: Bool = await withCheckedContinuation { continuation in
             container.loadPersistentStores { [weak self] _, error in
-                if let error = error {
+                if error != nil {
                     // If an error occurred, handle it on the main actor
                     Task { @MainActor [weak self] in
                         self?.handleStoreError()
