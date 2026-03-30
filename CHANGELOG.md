@@ -6,6 +6,12 @@
 - *(models)* Implement repository pattern and domain error handling
 - *(viewmodels)* Add observable viewmodels for all app modules
 - *(views)* Implement main TabView and specialized feature views
+- *(models)* Use do-try-catch for loadStores() with withCheckedThrowingContinuation
+
+### 🐛 Bug Fixes
+
+- *(models)* Change error variable test for loadStores()
+- *(models-viewmodels)* Typo
 
 ### 💼 Other
 
@@ -18,6 +24,7 @@
 - Add CHANGELOG
 - Update CHANGELOG
 - Add comments
+- Update CHANGELOG
 
 ### 🧪 Testing
 
