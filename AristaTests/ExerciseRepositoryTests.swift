@@ -53,7 +53,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         
         // When
-        let exercises = try! exerciseRepository.getExercise()
+        let exercises = try! exerciseRepository.getExercises()
         
         // Then
         XCTAssert(exercises.isEmpty == true)
@@ -70,7 +70,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         // When
-        let exercises = try! exerciseRepository.getExercise()
+        let exercises = try! exerciseRepository.getExercises()
         
         // Then
         XCTAssert(exercises.isEmpty == false)
@@ -91,7 +91,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         // When / Then
         do {
             try exerciseRepository.addExercise(category: "Football", duration: 10, intensity: 5, startDate: date, user: user1)
-            let exercises = try exerciseRepository.getExercise()
+            let exercises = try exerciseRepository.getExercises()
             XCTAssertFalse(exercises.isEmpty)
             XCTAssert(exercises.count == 1)
             XCTAssert(exercises.first?.wrappedCategory == "Football")
@@ -139,7 +139,7 @@ final class ExerciseRepositoryTests: XCTestCase {
         
         let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
         // When
-        let exercises = try! exerciseRepository.getExercise()
+        let exercises = try! exerciseRepository.getExercises()
         
         // Then
         XCTAssert(exercises.count == 3)
@@ -185,11 +185,11 @@ final class ExerciseRepositoryTests: XCTestCase {
         
         // When / Then
         do {
-            var exercises = try! exerciseRepository.getExercise()
+            var exercises = try! exerciseRepository.getExercises()
             try exerciseRepository.deleteExercise(exercises[2])
             try exerciseRepository.deleteExercise(exercises[1])
             try exerciseRepository.deleteExercise(exercises[0])
-            exercises = try! exerciseRepository.getExercise()
+            exercises = try! exerciseRepository.getExercises()
             XCTAssertTrue(exercises.isEmpty)
         } catch {
             XCTFail("Fetch failed with error: \(error)")

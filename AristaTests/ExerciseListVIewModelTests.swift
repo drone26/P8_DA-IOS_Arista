@@ -166,7 +166,7 @@ final class ExerciseListViewModelTests: XCTestCase {
 
         // When
         let repo = ExerciseRepository(viewContext: context)
-        let remaining = try repo.getExercise()
+        let remaining = try repo.getExercises()
         // Then
         XCTAssertTrue(remaining.isEmpty)
     }

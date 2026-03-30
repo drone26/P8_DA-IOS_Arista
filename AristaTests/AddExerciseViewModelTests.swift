@@ -54,7 +54,7 @@ final class AddExerciseViewModelTests: XCTestCase {
         // Then
         XCTAssertTrue(success, "L'ajout d'exercice devrait réussir")
         
-        let exercises = try exerciseRepository.getExercise()
+        let exercises = try exerciseRepository.getExercises()
         XCTAssertEqual(exercises.count, 1, "Il devrait y avoir un exercice en base")
         XCTAssertEqual(exercises.first?.category, expectedCategory.rawValue)
         XCTAssertEqual(exercises.first?.duration, Int64(expectedDuration))
