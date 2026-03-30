@@ -12,6 +12,7 @@
 
 - *(models)* Change error variable test for loadStores()
 - *(models-viewmodels)* Typo
+- *(tests)* Typo
 
 ### 💼 Other
 
@@ -24,6 +25,7 @@
 - Add CHANGELOG
 - Update CHANGELOG
 - Add comments
+- Update CHANGELOG
 - Update CHANGELOG
 
 ### 🧪 Testing
