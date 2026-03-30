@@ -73,7 +73,7 @@ struct ExerciseRepository {
         self.viewContext = PersistenceController.shared.container.viewContext
     }
     
-    func getExercise() throws -> [Exercise] {
+    func getExercises() throws -> [Exercise] {
         let request = Exercise.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(SortDescriptor<Exercise>(\.startDate, order: .reverse))]
         return try viewContext.fetch(request)

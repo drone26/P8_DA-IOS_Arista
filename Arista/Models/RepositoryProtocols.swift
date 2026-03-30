@@ -11,7 +11,7 @@ import CoreData
 // MARK: - Protocols
 
 protocol ExerciseRepositoryProtocol {
-    func getExercise() throws -> [Exercise]
+    func getExercises() throws -> [Exercise]
     func addExercise(category: String, duration: Int, intensity: Int, startDate: Date, user: User) throws
     func deleteExercise(_ exercise: Exercise) throws
 }

@@ -28,7 +28,7 @@ class ExerciseListViewModel {
     /// Fetch exercises
     func fetchExercises() async {
         do {
-            exercises = try repository.getExercise()
+            exercises = try repository.getExercises()
         } catch {
             self.errorMessage = AristaError.fetchFailed.localizedDescription
             self.hasError = true
