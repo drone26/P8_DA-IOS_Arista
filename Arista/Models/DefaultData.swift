@@ -25,7 +25,7 @@ struct DefaultData {
             initialUser.firstName = "Charlotte"
             initialUser.lastName = "Razoul"
             initialUser.email = "charlotte.razoul@example.com"
-            initialUser.password = "password1234"
+            initialUser.password = UUID().uuidString
             initialUser.id = UUID()
             
             if try sleepRepository.getSleepSessions().isEmpty {
