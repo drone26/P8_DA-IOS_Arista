@@ -119,6 +119,18 @@ final class ViewModelErrorTests: XCTestCase {
         XCTAssertTrue(viewModel.hasError)
         XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
     }
+
+    func test_WhenFormIsInvalid_AddExercise_ReturnsFalseWithSaveError() async throws {
+        // Given
+        let viewModel = AddExerciseViewModel(context: context)
+        viewModel.duration = 0 // Invalid
+        // When
+        let success = await viewModel.addExercise()
+        // Then
+        XCTAssertFalse(success)
+        XCTAssertTrue(viewModel.hasError)
+        XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
+    }
     
     // MARK: - SleepHistoryViewModel
     
@@ -145,6 +157,8 @@ final class ViewModelErrorTests: XCTestCase {
             context: context,
             userRepository: EmptyUserRepository()
         )
+        viewModel.duration = 30
+        viewModel.intensity = 5
         // When
         let success = await viewModel.addExercise()
         // Then
@@ -159,6 +173,8 @@ final class ViewModelErrorTests: XCTestCase {
             context: context,
             userRepository: FailingUserRepository()
         )
+        viewModel.duration = 30
+        viewModel.intensity = 5
         // When
         let success = await viewModel.addExercise()
         // Then

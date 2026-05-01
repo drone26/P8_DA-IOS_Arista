@@ -34,14 +34,29 @@ class AddExerciseViewModel {
     
     
     /// Add an exercise
-    /// - Returns: add is done ?
+    /// - Returns: true if the exercise was successfully added and saved
     func addExercise() async -> Bool {
+        // Reset error state
+        self.errorMessage = nil
+        self.hasError = false
+
+        // Validate form before proceeding
+        guard isFormValid else {
+            self.errorMessage = AristaError.saveFailed.localizedDescription
+            self.hasError = true
+            return false
+        }
+
         do {
+            // Retrieve current user
             guard let user = try userRepository.getUser() else {
                 self.errorMessage = AristaError.fetchFailed.localizedDescription
                 self.hasError = true
                 return false
             }
+
+            // Create and save the new exercise via the repository.
+            // The repository handles the CoreData entity instantiation and context saving.
             try exerciseRepository.addExercise(
                 category: category.rawValue,
                 duration: duration,
