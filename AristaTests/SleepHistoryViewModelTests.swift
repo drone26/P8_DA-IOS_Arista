@@ -10,6 +10,7 @@ import CoreData
 import Combine
 @testable import Arista
 
+@MainActor
 final class SleepHistoryViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     var persistenceController: PersistenceController!
@@ -69,6 +70,22 @@ final class SleepHistoryViewModelTests: XCTestCase {
         XCTAssert(viewModel.sleepSessions[2].duration == 4000)
     }
     
+    func test_WhenFetchSleepSessionsFails_ErrorMessageIsSetAndHasErrorIsTrue() async {
+        // Given
+        persistenceController = makeTestPersistenceController()
+        let context = persistenceController.container.viewContext
+
+        // Use FailingSleepRepository from ViewModelErrorTests.swift
+        viewModel = SleepHistoryViewModel(context: context, repository: FailingSleepRepository())
+
+        // When
+        await viewModel.fetchSleepSessions()
+
+        // Then
+        XCTAssertTrue(viewModel.hasError, "hasError should be true when fetch fails.")
+        XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription, "errorMessage should match AristaError.fetchFailed.localizedDescription.")
+    }
+
     private func emptyEntities(context: NSManagedObjectContext) {
         let fetchRequest = Sleep.fetchRequest()
         let objects = try! context.fetch(fetchRequest)
