@@ -27,18 +27,37 @@ class UserDataViewModel {
         self.repository = repository ?? UserRepository(viewContext: context)
     }
     
-    /// Fetch User data / information
+    /// Fetch User data / information from the repository and update view properties.
     func fetchUserData() async {
+        // Reset state before fetching
+        self.errorMessage = nil
+        self.hasError = false
+
         do {
             if let user = try repository.getUser() {
-                self.firstName = user.wrappedFirstName
-                self.lastName = user.wrappedLastName
-                self.email = user.wrappedEmail
-                self.password = user.wrappedPassword
+                updateProperties(with: user)
+            } else {
+                clearProperties()
             }
         } catch {
             self.errorMessage = AristaError.fetchFailed.localizedDescription
             self.hasError = true
         }
+    }
+
+    /// Updates view properties with user data.
+    private func updateProperties(with user: User) {
+        self.firstName = user.wrappedFirstName
+        self.lastName = user.wrappedLastName
+        self.email = user.wrappedEmail
+        self.password = user.wrappedPassword
+    }
+
+    /// Resets all view properties to their default empty values.
+    private func clearProperties() {
+        self.firstName = ""
+        self.lastName = ""
+        self.email = ""
+        self.password = ""
     }
 }
