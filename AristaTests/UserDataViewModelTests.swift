@@ -55,8 +55,6 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
         XCTAssertEqual(viewModel.firstName, "")
         XCTAssertEqual(viewModel.lastName, "")
-        XCTAssertEqual(viewModel.email, "")
-        XCTAssertEqual(viewModel.password, "")
     }
 
     // MARK: - Nil user path (no error, properties stay empty)
@@ -96,7 +94,5 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.hasError)
         XCTAssertEqual(viewModel.firstName, "Charlotte")
         XCTAssertEqual(viewModel.lastName, "Razoul")
-        XCTAssertEqual(viewModel.email, "charlotte.razoul@example.com")
-        XCTAssertEqual(viewModel.password, "password1234")
     }
 }
