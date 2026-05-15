@@ -20,10 +20,14 @@ class PersistenceController {
     
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Arista")
+
+        // Configure the store to use complete file protection for security.
+        let description = container.persistentStoreDescriptions.first ?? NSPersistentStoreDescription()
+        description.setOption(NSFileProtectionComplete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
+        container.persistentStoreDescriptions = [description]
+
         if inMemory {
-            let description = NSPersistentStoreDescription()
             description.url = URL(fileURLWithPath: "/dev/null")
-            container.persistentStoreDescriptions = [description]
             container.loadPersistentStores { _, _ in }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
