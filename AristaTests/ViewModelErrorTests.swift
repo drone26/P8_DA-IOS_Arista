@@ -112,12 +112,17 @@ final class ViewModelErrorTests: XCTestCase {
         )
         viewModel.exercises = [exercise]
         
+        // Reset error state for clean test
+        viewModel.hasError = false
+        viewModel.errorMessage = nil
+
         // When
         await viewModel.deleteExercise(at: IndexSet(integer: 0))
         
         // Then
-        XCTAssertTrue(viewModel.hasError)
-        XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription)
+        XCTAssertTrue(viewModel.hasError, "hasError should be true when deletion fails")
+        XCTAssertEqual(viewModel.errorMessage, AristaError.saveFailed.localizedDescription,
+                       "errorMessage should match AristaError.saveFailed description")
     }
     
     // MARK: - SleepHistoryViewModel
