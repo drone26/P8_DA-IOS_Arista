@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AddExerciseView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     var viewModel: AddExerciseViewModel
     
     var body: some View {
@@ -71,7 +71,7 @@ struct AddExerciseView: View {
                     // from the view's context, so the dismiss call stays on main thread.
                     Task {
                         if await viewModel.addExercise() {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         }
                     }
                 }
