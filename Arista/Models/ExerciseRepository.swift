@@ -94,5 +94,12 @@ struct ExerciseRepository {
         viewContext.delete(exercise)
         try viewContext.save()
     }
+
+    func deleteExercises(_ exercises: [Exercise]) throws {
+        for exercise in exercises {
+            viewContext.delete(exercise)
+        }
+        try viewContext.save()
+    }
 }
 

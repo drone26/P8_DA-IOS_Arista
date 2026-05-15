@@ -39,9 +39,8 @@ class ExerciseListViewModel {
     /// - Parameter offsets: index of the exercise to delete
     func deleteExercise(at offsets: IndexSet) async {
         do {
-            for index in offsets {
-                try repository.deleteExercise(exercises[index])
-            }
+            let exercisesToDelete = offsets.map { exercises[$0] }
+            try repository.deleteExercises(exercisesToDelete)
             await fetchExercises()
         } catch {
             self.errorMessage = AristaError.saveFailed.localizedDescription
