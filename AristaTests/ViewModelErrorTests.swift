@@ -195,7 +195,6 @@ final class ViewModelErrorTests: XCTestCase {
         user.firstName = "Test"
         user.lastName = "User"
         user.email = "test@example.com"
-        user.password = "password"
         user.id = UUID()
         return user
     }

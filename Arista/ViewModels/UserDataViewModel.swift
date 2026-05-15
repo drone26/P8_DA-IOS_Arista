@@ -15,7 +15,6 @@ class UserDataViewModel {
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
-    var password: String = ""
     var errorMessage: String?
     var hasError: Bool = false
 
@@ -34,7 +33,6 @@ class UserDataViewModel {
                 self.firstName = user.wrappedFirstName
                 self.lastName = user.wrappedLastName
                 self.email = user.wrappedEmail
-                self.password = user.wrappedPassword
             }
         } catch {
             self.errorMessage = AristaError.fetchFailed.localizedDescription

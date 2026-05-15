@@ -23,12 +23,11 @@ final class UserRepositoryTests: XCTestCase {
         try! context.save()
     }
     
-    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String, userPassword: String) -> User {
+    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String) -> User {
         let newUser = User(context: context)
         newUser.firstName = userFirstName
         newUser.lastName = userLastName
         newUser.email = userEmail
-        newUser.password = userPassword
         newUser.id = UUID()
         try! context.save()
         return newUser
@@ -59,10 +58,9 @@ final class UserRepositoryTests: XCTestCase {
         
         // When / Then
         do {
-            _ = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
+            _ = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com")
             let user = try userRepository.getUser()
             XCTAssert(user?.email == "eric.marcus@example.com")
-            XCTAssert(user?.password == "mdp-lol-123")
             XCTAssert(user?.firstName == "Eric")
             XCTAssert(user?.lastName == "Marcus")
         } catch {
@@ -83,6 +81,5 @@ final class UserRepositoryTests: XCTestCase {
         XCTAssertEqual(user.wrappedFirstName, "", "Should return empty string when firstName is nil")
         XCTAssertEqual(user.wrappedLastName, "", "Should return empty string when lastName is nil")
         XCTAssertEqual(user.wrappedEmail, "", "Should return empty string when email is nil")
-        XCTAssertEqual(user.wrappedPassword, "", "Should return empty string when password is nil")
     }
 }

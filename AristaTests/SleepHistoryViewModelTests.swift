@@ -40,7 +40,7 @@ final class SleepHistoryViewModelTests: XCTestCase {
         let date2 = Date(timeIntervalSinceNow: -(60*60*24))
         let date3 = Date(timeIntervalSinceNow: -(60*60*24*2))
         
-        let user = addUser(context: context, userFirstName: "Erica", userLastName: "Marcusi", userEmail: "erica.marcusi@example.com", userPassword: "mdp2-lol-123")
+        let user = addUser(context: context, userFirstName: "Erica", userLastName: "Marcusi", userEmail: "erica.marcusi@example.com")
         addSleep(context: context,
                  duration: 600,
                  quality: 1,
@@ -79,12 +79,11 @@ final class SleepHistoryViewModelTests: XCTestCase {
         try! context.save()
     }
     
-    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String, userPassword: String) -> User {
+    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String) -> User {
         let newUser = User(context: context)
         newUser.firstName = userFirstName
         newUser.lastName = userLastName
         newUser.email = userEmail
-        newUser.password = userPassword
         newUser.id = UUID()
         try! context.save()
         return newUser
