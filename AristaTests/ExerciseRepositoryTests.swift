@@ -103,6 +103,34 @@ final class ExerciseRepositoryTests: XCTestCase {
             XCTFail("Fetch failed with error: \(error)")
         }
     }
+
+    func test_WhenDeletingMultipleExercises_DeleteExercises_ReturnEmptyList() {
+        // Given
+        persistenceController = makeTestPersistenceController()
+        emptyEntities(context: persistenceController.container.viewContext)
+
+        let date1 = Date()
+        let date2 = Date(timeIntervalSinceNow: -(60*60*24))
+        let date3 = Date(timeIntervalSinceNow: -(60*60*24*2))
+
+        let user = addUser(context: persistenceController.container.viewContext, userFirstName: "A", userLastName: "B", userEmail: "a@b.com", userPassword: "p")
+        addExercice(context: persistenceController.container.viewContext, category: "Football", duration: 10, intensity: 5, startDate: date1, user: user)
+        addExercice(context: persistenceController.container.viewContext, category: "Running",  duration: 120, intensity: 1, startDate: date3, user: user)
+        addExercice(context: persistenceController.container.viewContext, category: "Fitness",  duration: 30,  intensity: 5, startDate: date2, user: user)
+
+        let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
+
+        // When / Then
+        do {
+            let exercises = try! exerciseRepository.getExercise()
+            XCTAssertEqual(exercises.count, 3)
+            try exerciseRepository.deleteExercises(exercises)
+            let remaining = try! exerciseRepository.getExercise()
+            XCTAssertTrue(remaining.isEmpty)
+        } catch {
+            XCTFail("Delete failed with error: \(error)")
+        }
+    }
     
     func test_WhenDeletingMultipleExercisesInDatabase_DeleteExercises_ReturnEmptyList() {
         // Given
