@@ -104,6 +104,52 @@ final class ExerciseRepositoryTests: XCTestCase {
         }
     }
     
+    func test_WhenDeletingMultipleExercisesInDatabase_DeleteExercises_ReturnEmptyList() {
+        // Given
+        persistenceController = makeTestPersistenceController()
+        emptyEntities(context: persistenceController.container.viewContext)
+
+        let date1 = Date()
+        let date2 = Date(timeIntervalSinceNow: -(60*60*24))
+        let date3 = Date(timeIntervalSinceNow: -(60*60*24*2))
+
+        var user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erica", userLastName: "Marcusi", userEmail: "erica.marcusi@example.com", userPassword: "mdp2-lol-123")
+        addExercice(context: persistenceController.container.viewContext,
+                    category: "Football",
+                    duration: 10,
+                    intensity: 5,
+                    startDate: date1,
+                    user: user)
+
+        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erice", userLastName: "Marceau", userEmail: "erice.marceau@example.com", userPassword: "mpd3-lol-123")
+        addExercice(context: persistenceController.container.viewContext,
+                    category: "Running",
+                    duration: 120,
+                    intensity: 1,
+                    startDate: date3,
+                    user: user)
+
+        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Frédericd", userLastName: "Marcus", userEmail: "fredericd.marcus@example.com", userPassword: "mdp4-lol-123")
+        addExercice(context: persistenceController.container.viewContext,
+                    category: "Fitness",
+                    duration: 30,
+                    intensity: 5,
+                    startDate: date2,
+                    user: user)
+
+        let exerciseRepository = ExerciseRepository(viewContext: persistenceController.container.viewContext)
+
+        // When / Then
+        do {
+            var exercises = try! exerciseRepository.getExercises()
+            try exerciseRepository.deleteExercises(exercises)
+            exercises = try! exerciseRepository.getExercises()
+            XCTAssertTrue(exercises.isEmpty)
+        } catch {
+            XCTFail("Fetch failed with error: \(error)")
+        }
+    }
+
     func test_WhenAddingMultipleExerciseInDatabase_GetExercise_ReturnAListContainingTheExerciseInTheRightOrder() {
         // Given
         persistenceController = makeTestPersistenceController()
