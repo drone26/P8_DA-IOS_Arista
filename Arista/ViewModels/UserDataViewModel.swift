@@ -25,6 +25,7 @@ class UserDataViewModel {
     init(context: NSManagedObjectContext, repository: (any UserRepositoryProtocol)? = nil) {
         self.viewContext = context
         self.repository = repository ?? UserRepository(viewContext: context)
+        Task { await fetchUserData() }
     }
     
     /// Fetch User data / information
