@@ -83,7 +83,7 @@ final class UserDataViewModelTests: XCTestCase {
         user.firstName = "Charlotte"
         user.lastName = "Razoul"
         user.email = "charlotte.razoul@example.com"
-        user.password = "password1234"
+        user.password = "testPassword"
         user.id = UUID()
         try context.save()
 
@@ -97,6 +97,6 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.firstName, "Charlotte")
         XCTAssertEqual(viewModel.lastName, "Razoul")
         XCTAssertEqual(viewModel.email, "charlotte.razoul@example.com")
-        XCTAssertEqual(viewModel.password, "password1234")
+        XCTAssertEqual(viewModel.password, "testPassword")
     }
 }
