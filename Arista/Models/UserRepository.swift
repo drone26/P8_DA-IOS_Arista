@@ -7,8 +7,16 @@
 
 import Foundation
 import CoreData
+import CryptoKit
 
 extension User {
+    /// Hashes a plain password using SHA256 and saves the hashed value.
+    func setHashedPassword(_ plainText: String) {
+        guard let data = plainText.data(using: .utf8) else { return }
+        let hash = SHA256.hash(data: data)
+        self.password = hash.map { String(format: "%02x", $0) }.joined()
+    }
+
     /// Safe access to the firstName.
     var wrappedFirstName: String {
         firstName ?? ""
