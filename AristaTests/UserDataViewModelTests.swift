@@ -56,6 +56,7 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.firstName, "")
         XCTAssertEqual(viewModel.lastName, "")
         XCTAssertEqual(viewModel.email, "")
+        XCTAssertEqual(viewModel.password, "")
     }
 
     // MARK: - Nil user path (no error, properties stay empty)
@@ -82,6 +83,7 @@ final class UserDataViewModelTests: XCTestCase {
         user.firstName = "Charlotte"
         user.lastName = "Razoul"
         user.email = "charlotte.razoul@example.com"
+        user.password = "password1234"
         user.id = UUID()
         try context.save()
 
@@ -95,5 +97,6 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.firstName, "Charlotte")
         XCTAssertEqual(viewModel.lastName, "Razoul")
         XCTAssertEqual(viewModel.email, "charlotte.razoul@example.com")
+        XCTAssertEqual(viewModel.password, "password1234")
     }
 }

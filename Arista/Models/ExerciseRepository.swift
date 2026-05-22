@@ -24,9 +24,17 @@ extension Exercise {
         startDate ?? Date()
     }
     
+    /// Static DateFormatter to avoid reallocating formatting objects.
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter
+    }()
+
     /// Safe access to the start date in formatted string format.
     var wrappedFormattedStartDate: String {
-        wrappedStartDate.formatted()
+        Self.dateFormatter.string(from: wrappedStartDate)
     }
     
     /// Safe access to the duration.
@@ -92,6 +100,13 @@ struct ExerciseRepository {
     
     func deleteExercise(_ exercise: Exercise) throws {
         viewContext.delete(exercise)
+        try viewContext.save()
+    }
+
+    func deleteExercises(_ exercises: [Exercise]) throws {
+        for exercise in exercises {
+            viewContext.delete(exercise)
+        }
         try viewContext.save()
     }
 }

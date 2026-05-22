@@ -134,6 +134,43 @@ final class AddExerciseViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isFormValid)
     }
 
+    // MARK: - Error path tests
+
+    func test_WhenAddExerciseFails_ThenErrorMessageIsSetAndHasErrorIsTrue() async throws {
+        // Given
+        let mockUserRepo = MockUserRepository()
+        mockUserRepo.userToReturn = addUser(context: context, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
+
+        let mockExerciseRepo = MockExerciseRepository()
+        mockExerciseRepo.shouldThrowError = true
+
+        let errorViewModel = AddExerciseViewModel(context: context, exerciseRepository: mockExerciseRepo, userRepository: mockUserRepo)
+
+        // When
+        let success = await errorViewModel.addExercise()
+
+        // Then
+        XCTAssertFalse(success)
+        XCTAssertTrue(errorViewModel.hasError)
+        XCTAssertEqual(errorViewModel.errorMessage, AristaError.saveFailed.localizedDescription)
+    }
+
+    func test_WhenUserFetchReturnsNil_ThenErrorMessageIsSetToFetchFailed() async throws {
+        // Given
+        let mockUserRepo = MockUserRepository()
+        mockUserRepo.userToReturn = nil
+
+        let errorViewModel = AddExerciseViewModel(context: context, userRepository: mockUserRepo)
+
+        // When
+        let success = await errorViewModel.addExercise()
+
+        // Then
+        XCTAssertFalse(success)
+        XCTAssertTrue(errorViewModel.hasError)
+        XCTAssertEqual(errorViewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
+    }
+
     // MARK: - Helpers
     
     private func emptyEntities(context: NSManagedObjectContext) {
@@ -151,5 +188,25 @@ final class AddExerciseViewModelTests: XCTestCase {
         newUser.id = UUID()
         try! context.save()
         return newUser
+    }
+}
+
+// MARK: - Mocks
+
+class MockExerciseRepository: ExerciseRepositoryProtocol {
+    var shouldThrowError = false
+    func getExercises() throws -> [Exercise] { [] }
+    func addExercise(category: String, duration: Int, intensity: Int, startDate: Date, user: User) throws {
+        if shouldThrowError {
+            throw AristaError.saveFailed
+        }
+    }
+    func deleteExercise(_ exercise: Exercise) throws {}
+}
+
+class MockUserRepository: UserRepositoryProtocol {
+    var userToReturn: User?
+    func getUser() throws -> User? {
+        return userToReturn
     }
 }

@@ -16,6 +16,7 @@ final class FailingExerciseRepository: ExerciseRepositoryProtocol {
     func getExercises() throws -> [Exercise] { throw AristaError.fetchFailed }
     func addExercise(category: String, duration: Int, intensity: Int, startDate: Date, user: User) throws { throw AristaError.saveFailed }
     func deleteExercise(_ exercise: Exercise) throws { throw AristaError.saveFailed }
+    func deleteExercises(_ exercises: [Exercise]) throws { throw AristaError.saveFailed }
 }
 
 final class FailingSleepRepository: SleepRepositoryProtocol {
