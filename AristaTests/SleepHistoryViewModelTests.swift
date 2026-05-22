@@ -11,10 +11,8 @@ import Combine
 @testable import Arista
 
 final class SleepHistoryViewModelTests: XCTestCase {
-    var cancellables = Set<AnyCancellable>()
     var persistenceController: PersistenceController!
     var viewModel: SleepHistoryViewModel!
-    var repository: SleepRepository!
     
     func test_WhenNoSleepSessionIsInDatabase_FetchSleepSessions_ReturnEmptyList() async {
         // Given
