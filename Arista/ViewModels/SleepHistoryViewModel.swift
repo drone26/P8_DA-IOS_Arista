@@ -3,39 +3,34 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import Foundation
 import CoreData
 
-class SleepHistoryViewModel: ObservableObject {
-    @Published var sleepSessions = [FakeSleepSession]()
-    
-    private var viewContext: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
-        fetchSleepSessions()
-    }
-    
-    private func fetchSleepSessions() {
-        
-        sleepSessions = [FakeSleepSession(), 
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession()]
-    }
-}
+@MainActor
+@Observable
+class SleepHistoryViewModel {
+    var sleepSessions = [Sleep]()
+    var errorMessage: String?
+    var hasError: Bool = false
 
-struct FakeSleepSession: Identifiable {
-    var id = UUID()
-    var startDate: Date = Date()
-    var duration: Int = 695
-    var quality: Int = (0...10).randomElement()!
+    let viewContext: NSManagedObjectContext
+    private let repository: any SleepRepositoryProtocol
+
+    init(context: NSManagedObjectContext, repository: (any SleepRepositoryProtocol)? = nil) {
+        self.viewContext = context
+        self.repository = repository ?? SleepRepository(viewContext: context)
+    }
+    
+    /// Fetech sleep sessions
+    func fetchSleepSessions() async {
+        do {
+            sleepSessions = try repository.getSleepSessions()
+        } catch {
+            self.errorMessage = AristaError.fetchFailed.localizedDescription
+            self.hasError = true
+        }
+    }
 }

@@ -3,33 +3,48 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
-import Foundation
-
 import CoreData
+import SwiftUI
 
-class ExerciseListViewModel: ObservableObject {
-    @Published var exercises = [FakeExercise]()
+@MainActor
+@Observable
+class ExerciseListViewModel {
+    var exercises = [Exercise]()
+    var errorMessage: String?
+    var hasError: Bool = false
 
-    var viewContext: NSManagedObjectContext
+    let viewContext: NSManagedObjectContext
+    private let repository: any ExerciseRepositoryProtocol
 
-    init(context: NSManagedObjectContext) {
+    init(context: NSManagedObjectContext, repository: (any ExerciseRepositoryProtocol)? = nil) {
         self.viewContext = context
-        fetchExercises()
+        self.repository = repository ?? ExerciseRepository(viewContext: context)
+        Task { await fetchExercises() }
     }
 
-    private func fetchExercises() {
-        // TODO: fetch data in CoreData and replace dumb value below with appropriate information
-        exercises = [FakeExercise(), FakeExercise(), FakeExercise()]
+    /// Fetch exercises
+    func fetchExercises() async {
+        do {
+            exercises = try repository.getExercises()
+        } catch {
+            self.errorMessage = AristaError.fetchFailed.localizedDescription
+            self.hasError = true
+        }
     }
-}
-
-struct FakeExercise: Identifiable {
-    var id = UUID()
     
-    var category: String = "Football"
-    var duration: Int = 120
-    var intensity: Int = 8
-    var date: Date = Date()
+    /// Delete an exercise
+    /// - Parameter offsets: index of the exercise to delete
+    func deleteExercise(at offsets: IndexSet) async {
+        do {
+            let exercisesToDelete = offsets.map { exercises[$0] }
+            try repository.deleteExercises(exercisesToDelete)
+            await fetchExercises()
+        } catch {
+            self.errorMessage = AristaError.saveFailed.localizedDescription
+            self.hasError = true
+        }
+    }
 }

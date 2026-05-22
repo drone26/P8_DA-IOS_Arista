@@ -3,25 +3,39 @@
 //  Arista
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
+//  Modified by Mathieu Arrio on 05/03/2026.
 //
 
 import Foundation
 import CoreData
 
-class UserDataViewModel: ObservableObject {
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
+@MainActor
+@Observable
+class UserDataViewModel {
+    var firstName: String = ""
+    var lastName: String = ""
+    var errorMessage: String?
+    var hasError: Bool = false
 
-    private var viewContext: NSManagedObjectContext
+    let viewContext: NSManagedObjectContext
+    private let repository: any UserRepositoryProtocol
 
-    init(context: NSManagedObjectContext) {
+    init(context: NSManagedObjectContext, repository: (any UserRepositoryProtocol)? = nil) {
         self.viewContext = context
-        fetchUserData()
+        self.repository = repository ?? UserRepository(viewContext: context)
+        Task { await fetchUserData() }
     }
-
-    private func fetchUserData() {
-        // TODO: fetch data in CoreData and replace dumb value below with appropriate information
-        firstName = "Charlotte"
-        lastName = "Corino"
+    
+    /// Fetch User data / information
+    func fetchUserData() async {
+        do {
+            if let user = try repository.getUser() {
+                self.firstName = user.wrappedFirstName
+                self.lastName = user.wrappedLastName
+            }
+        } catch {
+            self.errorMessage = AristaError.fetchFailed.localizedDescription
+            self.hasError = true
+        }
     }
 }
