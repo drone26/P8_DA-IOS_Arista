@@ -36,7 +36,7 @@ final class AddExerciseViewModelTests: XCTestCase {
     
     func test_WhenAddingOneExerciseInDatabase_AddExercise_ReturnAListContainingTheExercise() async throws {
         // Given
-        _ = addUser(context: context, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
+        _ = addUser(context: context, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com")
         
         let expectedCategory = ExerciseCategory.running
         let expectedDuration = 45
@@ -180,12 +180,11 @@ final class AddExerciseViewModelTests: XCTestCase {
         try! context.save()
     }
     
-    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String, userPassword: String) -> User {
+    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String) -> User {
         let newUser = User(context: context)
         newUser.firstName = userFirstName
         newUser.lastName = userLastName
         newUser.email = userEmail
-        newUser.password = userPassword
         newUser.id = UUID()
         try! context.save()
         return newUser

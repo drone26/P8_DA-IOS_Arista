@@ -23,11 +23,6 @@ extension User {
     var wrappedEmail: String {
         email ?? ""
     }
-    
-    /// Safe access to the password.
-    var wrappedPassword: String {
-        password ?? ""
-    }
 }
 
 struct UserRepository {

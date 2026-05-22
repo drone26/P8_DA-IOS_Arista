@@ -55,6 +55,7 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.errorMessage, AristaError.fetchFailed.localizedDescription)
         XCTAssertEqual(viewModel.firstName, "")
         XCTAssertEqual(viewModel.lastName, "")
+        XCTAssertEqual(viewModel.email, "")
         XCTAssertEqual(viewModel.password, "")
     }
 
@@ -81,6 +82,7 @@ final class UserDataViewModelTests: XCTestCase {
         let user = User(context: context)
         user.firstName = "Charlotte"
         user.lastName = "Razoul"
+        user.email = "charlotte.razoul@example.com"
         user.password = "password1234"
         user.id = UUID()
         try context.save()
@@ -94,6 +96,7 @@ final class UserDataViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.hasError)
         XCTAssertEqual(viewModel.firstName, "Charlotte")
         XCTAssertEqual(viewModel.lastName, "Razoul")
+        XCTAssertEqual(viewModel.email, "charlotte.razoul@example.com")
         XCTAssertEqual(viewModel.password, "password1234")
     }
 }

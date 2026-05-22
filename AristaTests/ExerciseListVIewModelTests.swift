@@ -43,7 +43,7 @@ final class ExerciseListViewModelTests: XCTestCase {
         let context = persistenceController.container.viewContext
         let date = Date()
         let user = addUser(context: context, firstName: "Eric", lastName: "Marcus",
-                           email: "eric.marcus@example.com", password: "mdp-lol-123")
+                           email: "eric.marcus@example.com")
         addExercise(context: context, category: "Football", duration: 10,
                     intensity: 5, startDate: date, user: user)
 
@@ -66,9 +66,9 @@ final class ExerciseListViewModelTests: XCTestCase {
         let date2 = Date(timeIntervalSinceNow: -(60*60*24))
         let date3 = Date(timeIntervalSinceNow: -(60*60*24*2))
 
-        let u1 = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
-        let u2 = addUser(context: context, firstName: "B", lastName: "B", email: "b@b.com", password: "p")
-        let u3 = addUser(context: context, firstName: "C", lastName: "C", email: "c@c.com", password: "p")
+        let u1 = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com")
+        let u2 = addUser(context: context, firstName: "B", lastName: "B", email: "b@b.com")
+        let u3 = addUser(context: context, firstName: "C", lastName: "C", email: "c@c.com")
         addExercise(context: context, category: "Football", duration: 10,  intensity: 5, startDate: date1, user: u1)
         addExercise(context: context, category: "Running",  duration: 120, intensity: 1, startDate: date3, user: u2)
         addExercise(context: context, category: "Fitness",  duration: 30,  intensity: 5, startDate: date2, user: u3)
@@ -89,7 +89,7 @@ final class ExerciseListViewModelTests: XCTestCase {
     func test_WhenDeletingOneExercise_ExercisesListHasOneFewerItem() async throws {
         // Given
         let context = persistenceController.container.viewContext
-        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
+        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
         addExercise(context: context, category: "Running",  duration: 30, intensity: 3, startDate: Date(timeIntervalSinceNow: -3600), user: user)
 
@@ -111,7 +111,7 @@ final class ExerciseListViewModelTests: XCTestCase {
     func test_WhenDeletingOneExercise_CorrectExerciseIsRemoved() async throws {
         // Given
         let context = persistenceController.container.viewContext
-        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
+        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
         addExercise(context: context, category: "Running",  duration: 30, intensity: 3, startDate: Date(timeIntervalSinceNow: -3600), user: user)
 
@@ -129,7 +129,7 @@ final class ExerciseListViewModelTests: XCTestCase {
     func test_WhenDeletingAllExercises_ExerciseListIsEmpty() async throws {
         // Given
         let context = persistenceController.container.viewContext
-        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
+        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
         addExercise(context: context, category: "Running",  duration: 30, intensity: 3, startDate: Date(timeIntervalSinceNow: -3600), user: user)
         addExercise(context: context, category: "Fitness",  duration: 45, intensity: 7, startDate: Date(timeIntervalSinceNow: -7200), user: user)
@@ -152,7 +152,7 @@ final class ExerciseListViewModelTests: XCTestCase {
     func test_WhenDeletingExercise_FetchExercisesIsCalledAfterDeletion() async throws {
         // Given
         let context = persistenceController.container.viewContext
-        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com", password: "p")
+        let user = addUser(context: context, firstName: "A", lastName: "A", email: "a@a.com")
         addExercise(context: context, category: "Football", duration: 10, intensity: 5, startDate: Date(), user: user)
 
         viewModel = ExerciseListViewModel(context: context)
@@ -180,12 +180,11 @@ final class ExerciseListViewModelTests: XCTestCase {
     }
 
     private func addUser(context: NSManagedObjectContext, firstName: String, lastName: String,
-                         email: String, password: String) -> User {
+                         email: String) -> User {
         let user = User(context: context)
         user.firstName = firstName
         user.lastName = lastName
         user.email = email
-        user.password = password
         user.id = UUID()
         try! context.save()
         return user

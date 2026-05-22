@@ -23,12 +23,11 @@ final class SleepRepositoryTests: XCTestCase {
         try! context.save()
     }
     
-    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String, userPassword: String) -> User {
+    private func addUser(context: NSManagedObjectContext, userFirstName: String, userLastName: String, userEmail: String) -> User {
         let newUser = User(context: context)
         newUser.firstName = userFirstName
         newUser.lastName = userLastName
         newUser.email = userEmail
-        newUser.password = userPassword
         newUser.id = UUID()
         try! context.save()
         return newUser
@@ -64,7 +63,7 @@ final class SleepRepositoryTests: XCTestCase {
         emptyEntities(context: persistenceController.container.viewContext)
         
         let date = Date()
-        let user1 = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com", userPassword: "mdp-lol-123")
+        let user1 = addUser(context: persistenceController.container.viewContext, userFirstName: "Eric", userLastName: "Marcus", userEmail: "eric.marcus@example.com")
         addSleep(context: persistenceController.container.viewContext, quality: 5, duration: 10, startDate: date, user: user1)
         
         let sleepRepository = SleepRepository(viewContext: persistenceController.container.viewContext)
@@ -87,13 +86,13 @@ final class SleepRepositoryTests: XCTestCase {
         let date2 = Date(timeIntervalSinceNow: -(60*60*24))
         let date3 = Date(timeIntervalSinceNow: -(60*60*24*2))
         
-        var user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erica", userLastName: "Marcusi", userEmail: "erica.marcusi@example.com", userPassword: "mdp2-lol-123")
+        var user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erica", userLastName: "Marcusi", userEmail: "erica.marcusi@example.com")
         addSleep(context: persistenceController.container.viewContext, quality: 1, duration: 10, startDate: date1, user: user)
         
-        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erice", userLastName: "Marceau", userEmail: "erice.marceau@example.com", userPassword: "mpd3-lol-123")
+        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Erice", userLastName: "Marceau", userEmail: "erice.marceau@example.com")
         addSleep(context: persistenceController.container.viewContext, quality: 4, duration: 10, startDate: date3, user: user)
         
-        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Frédericd", userLastName: "Marcus", userEmail: "fredericd.marcus@example.com", userPassword: "mdp4-lol-123")
+        user = addUser(context: persistenceController.container.viewContext, userFirstName: "Frédericd", userLastName: "Marcus", userEmail: "fredericd.marcus@example.com")
         addSleep(context: persistenceController.container.viewContext, quality: 8, duration: 10, startDate: date2, user: user)
         
         let sleepRepository = SleepRepository(viewContext: persistenceController.container.viewContext)
