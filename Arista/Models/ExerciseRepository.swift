@@ -84,6 +84,7 @@ struct ExerciseRepository {
     func getExercises() throws -> [Exercise] {
         let request = Exercise.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(SortDescriptor<Exercise>(\.startDate, order: .reverse))]
+        request.fetchBatchSize = 20
         return try viewContext.fetch(request)
     }
     
