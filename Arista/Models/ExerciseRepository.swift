@@ -105,10 +105,18 @@ struct ExerciseRepository {
     }
 
     func deleteExercises(_ exercises: [Exercise]) throws {
-        for exercise in exercises {
-            viewContext.delete(exercise)
+        guard !exercises.isEmpty else { return }
+        let objectIDs = exercises.map { $0.objectID }
+        let batchDeleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
+        batchDeleteRequest.resultType = .resultTypeObjectIDs
+
+        let result = try viewContext.execute(batchDeleteRequest) as? NSBatchDeleteResult
+        if let deletedObjectIDs = result?.result as? [NSManagedObjectID] {
+            NSManagedObjectContext.mergeChanges(
+                fromRemoteContextSave: [NSDeletedObjectsKey: deletedObjectIDs],
+                into: [viewContext]
+            )
         }
-        try viewContext.save()
     }
 }
 
