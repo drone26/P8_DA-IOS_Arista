@@ -14,6 +14,7 @@ protocol ExerciseRepositoryProtocol {
     func getExercises() throws -> [Exercise]
     func addExercise(category: String, duration: Int, intensity: Int, startDate: Date, user: User) throws
     func deleteExercise(_ exercise: Exercise) throws
+    func deleteExercises(_ exercises: [Exercise]) throws
 }
 
 protocol SleepRepositoryProtocol {
